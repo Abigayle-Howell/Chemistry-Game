@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemistry Balancing Game</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #e3f2fd; }
+        .container { margin-top: 50px; padding: 20px; background: white; width: 80%; max-width: 400px; margin: auto; border-radius: 10px; box-shadow: 2px 2px 10px gray; }
+        input { width: 40px; text-align: center; font-size: 16px; -moz-appearance: textfield; }
+        input::-webkit-outer-spin-button, 
+        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        button { margin-top: 10px; padding: 8px 15px; font-size: 14px; background: #007BFF; color: white; border: none; cursor: pointer; border-radius: 5px; }
+        .result { margin-top: 10px; font-weight: bold; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>Balance This Equation</h3>
+        <p id="equation"> <input type="number" id="coeff1" min="1"> X + 
+           <input type="number" id="coeff2" min="1"> Y → 
+           <input type="number" id="coeff3" min="1"> Z</p>
+        <button onclick="checkBalance()">Check</button>
+        <button onclick="newEquation()">New Equation</button>
+        <p class="result" id="result"></p>
+    </div>
+    <script>
+        const equations = [
+            { reactants: ["H₂", "O₂"], product: "H₂O", answer: [2, 1, 2] },
+            { reactants: ["Na", "Cl₂"], product: "NaCl", answer: [2, 1, 2] },
+            { reactants: ["C", "O₂"], product: "CO₂", answer: [1, 1, 1] },
+            { reactants: ["N₂", "H₂"], product: "NH₃", answer: [1, 3, 2] }
+        ];
+
+        let currentEq = {};
+        
+        function newEquation() {
+            currentEq = equations[Math.floor(Math.random() * equations.length)];
+            document.getElementById("equation").innerHTML = `
+                <input type="number" id="coeff1" min="1"> ${currentEq.reactants[0]} + 
+                <input type="number" id="coeff2" min="1"> ${currentEq.reactants[1]} → 
+                <input type="number" id="coeff3" min="1"> ${currentEq.product}`;
+            document.getElementById("result").innerText = "";
+        }
+        
+        function checkBalance() {
+            let coeff1 = parseInt(document.getElementById("coeff1").value) || 0;
+            let coeff2 = parseInt(document.getElementById("coeff2").value) || 0;
+            let coeff3 = parseInt(document.getElementById("coeff3").value) || 0;
+            
+            if (coeff1 === currentEq.answer[0] && coeff2 === currentEq.answer[1] && coeff3 === currentEq.answer[2]) {
+                document.getElementById("result").innerText = "✅ Correct!";
+                document.getElementById("result").style.color = "green";
+            } else {
+                document.getElementById("result").innerText = "❌ Try again!";
+                document.getElementById("result").style.color = "red";
+            }
+        }
+
+        newEquation();
+    </script>
+</body>
+</html>
