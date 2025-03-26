@@ -8,21 +8,35 @@
     <style>
         body { font-family: Arial, sans-serif; text-align: center; background-color: #e3f2fd; position: relative; margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; flex-direction: column; }
         .container { padding: 20px; background: white; width: 80%; max-width: 400px; margin: 0; border-radius: 10px; box-shadow: 2px 2px 10px gray; }
-        input { width: 40px; text-align: center; font-size: 16px; -moz-appearance: textfield; }
+        input { width: 50px; text-align: center; font-size: 16px; margin: 5px; -moz-appearance: textfield; }
         input::-webkit-outer-spin-button, 
         input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        button { margin-top: 10px; padding: 8px 15px; font-size: 14px; background: #007BFF; color: white; border: none; cursor: pointer; border-radius: 5px; }
-        .result { margin-top: 10px; font-weight: bold; font-size: 16px; }
-        .score { margin-top: 10px; font-size: 18px; font-weight: bold; }
+        button { margin-top: 15px; padding: 10px 15px; font-size: 16px; background: #007BFF; color: white; border: none; cursor: pointer; border-radius: 5px; transition: 0.3s; }
+        button:hover { background: #0056b3; }
+        .result { margin-top: 15px; font-weight: bold; font-size: 18px; }
+        .score { margin-top: 15px; font-size: 20px; font-weight: bold; }
         .hidden { display: none; }
         .footer { position: absolute; bottom: 10px; left: 10px; font-size: 14px; color: #555; }
+        .correct { color: green; animation: pop 0.3s ease-in-out; }
+        .incorrect { color: red; animation: shake 0.3s ease-in-out; }
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
     </style>
 </head>
 <body>
     <div id="main-menu" class="container">
         <h2>Welcome to Abby's chemistry game :D</h2>
         <p>How to Play:</p>
-        <p>1. You will be given a unbalanced chemical equation</p>
+        <p>1. You will be given an unbalanced chemical equation</p>
         <p>2. Enter the correct coefficients in the boxes to balance it</p>
         <p>3. Select the correct reaction type from the dropdown</p>
         <p>4. Click "Check" to see if you're right</p>
@@ -51,40 +65,6 @@
     </div>
     
     <script>
-        const equations = [
-            { reactants: ["H₂", "O₂"], product: "H₂O", answer: [2, 1, 2], type: "synthesis", explanation: "Water is formed when hydrogen gas reacts with oxygen gas. Balance: 2H₂ + O₂ → 2H₂O." },
-            { reactants: ["Na", "Cl₂"], product: "NaCl", answer: [2, 1, 2], type: "synthesis", explanation: "Sodium and chlorine combine to form sodium chloride. Balance: 2Na + Cl₂ → 2NaCl." },
-            { reactants: ["C", "O₂"], product: "CO₂", answer: [1, 1, 1], type: "combustion", explanation: "Carbon reacts with oxygen to form carbon dioxide. Balance: C + O₂ → CO₂." },
-            { reactants: ["N₂", "H₂"], product: "NH₃", answer: [1, 3, 2], type: "synthesis", explanation: "Nitrogen and hydrogen react to form ammonia. Balance: N₂ + 3H₂ → 2NH₃." },
-            { reactants: ["CaCO₃"], product: "CaO + CO₂", answer: [1, 1, 1], type: "decomposition", explanation: "Calcium carbonate decomposes to form calcium oxide and carbon dioxide. Balance: CaCO₃ → CaO + CO₂." },
-            { reactants: ["CH₄", "O₂"], product: "CO₂ + H₂O", answer: [1, 2, 1, 2], type: "combustion", explanation: "Methane reacts with oxygen to form carbon dioxide and water. Balance: CH₄ + 2O₂ → CO₂ + 2H₂O." },
-            { reactants: ["HCl", "NaOH"], product: "NaCl + H₂O", answer: [1, 1, 1, 1], type: "double replacement", explanation: "Hydrochloric acid reacts with sodium hydroxide to form salt and water. Balance: HCl + NaOH → NaCl + H₂O." },
-            { reactants: ["H₂SO₄", "NaOH"], product: "Na₂SO₄ + H₂O", answer: [1, 2, 1, 1], type: "double replacement", explanation: "Sulfuric acid reacts with sodium hydroxide to form sodium sulfate and water. Balance: H₂SO₄ + 2NaOH → Na₂SO₄ + 2H₂O." },
-            { reactants: ["Fe", "O₂"], product: "Fe₂O₃", answer: [4, 3, 2], type: "synthesis", explanation: "Iron reacts with oxygen to form iron(III) oxide. Balance: 4Fe + 3O₂ → 2Fe₂O₃." },
-            { reactants: ["KClO₃"], product: "KCl + O₂", answer: [2, 2, 3], type: "decomposition", explanation: "Potassium chlorate decomposes into potassium chloride and oxygen. Balance: 2KClO₃ → 2KCl + 3O₂." },
-            { reactants: ["C₂H₆", "O₂"], product: "CO₂ + H₂O", answer: [2, 7, 4, 6], type: "combustion", explanation: "Ethane reacts with oxygen to form carbon dioxide and water. Balance: 2C₂H₆ + 7O₂ → 4CO₂ + 6H₂O." }
-        ];
-
-        let currentEq = {};
-        let score = 0;
-
-        function startGame() {
-            document.getElementById("main-menu").classList.add("hidden");
-            document.getElementById("game-container").classList.remove("hidden");
-            newEquation();
-        }
-
-        function newEquation() {
-            currentEq = equations[Math.floor(Math.random() * equations.length)];
-            document.getElementById("equation").innerHTML = `
-                <input type="number" id="coeff1" min="1"> ${currentEq.reactants[0]} + 
-                <input type="number" id="coeff2" min="1"> ${currentEq.reactants[1]} → 
-                <input type="number" id="coeff3" min="1"> ${currentEq.product}`;
-            document.getElementById("result").innerText = "";
-            document.getElementById("explanation").classList.add("hidden");
-            document.getElementById("reactionType").value = "";
-        }
-
         function checkBalance() {
             const coeffs = [
                 parseInt(document.getElementById("coeff1").value) || 0,
@@ -92,15 +72,18 @@
                 parseInt(document.getElementById("coeff3").value) || 0
             ];
             const selectedType = document.getElementById("reactionType").value;
+            let resultText = document.getElementById("result");
             
             if (JSON.stringify(coeffs) === JSON.stringify(currentEq.answer) && selectedType === currentEq.type) {
-                document.getElementById("result").innerText = "Correct!";
+                resultText.innerText = "Correct!";
+                resultText.className = "result correct";
                 document.getElementById("explanation").innerText = currentEq.explanation;
                 document.getElementById("explanation").classList.remove("hidden");
                 score++;
                 document.getElementById("score").innerText = score;
             } else {
-                document.getElementById("result").innerText = "Try Again!";
+                resultText.innerText = "Try Again!";
+                resultText.className = "result incorrect";
             }
         }
     </script>
