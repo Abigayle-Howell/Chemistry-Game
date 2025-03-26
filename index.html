@@ -46,9 +46,7 @@
     
     <div id="game-container" class="container hidden">
         <h3>Balance this:</h3>
-        <p id="equation"> <input type="number" id="coeff1" min="1"> X + 
-           <input type="number" id="coeff2" min="1"> Y → 
-           <input type="number" id="coeff3" min="1"> Z</p>
+        <p id="equation"></p>
         <select id="reactionType">
             <option value="">Select Reaction Type</option>
             <option value="synthesis">Synthesis</option>
@@ -65,9 +63,29 @@
     </div>
     
     <script>
+        const equations = [
+            { reactants: ["H₂", "O₂"], product: "H₂O", answer: [2, 1, 2], type: "synthesis", explanation: "Water is formed when hydrogen gas reacts with oxygen gas." },
+            { reactants: ["C", "O₂"], product: "CO₂", answer: [1, 1, 1], type: "combustion", explanation: "Carbon reacts with oxygen to form carbon dioxide." }
+        ];
+        
+        let currentEq = {};
+        let score = 0;
+        
         function startGame() {
             document.getElementById("main-menu").classList.add("hidden");
             document.getElementById("game-container").classList.remove("hidden");
+            newEquation();
+        }
+        
+        function newEquation() {
+            currentEq = equations[Math.floor(Math.random() * equations.length)];
+            document.getElementById("equation").innerHTML = 
+                `<input type="number" id="coeff1" min="1"> ${currentEq.reactants[0]} + 
+                <input type="number" id="coeff2" min="1"> ${currentEq.reactants[1]} → 
+                <input type="number" id="coeff3" min="1"> ${currentEq.product}`;
+            document.getElementById("result").innerText = "";
+            document.getElementById("explanation").classList.add("hidden");
+            document.getElementById("reactionType").value = "";
         }
         
         function checkBalance() {
@@ -77,18 +95,15 @@
                 parseInt(document.getElementById("coeff3").value) || 0
             ];
             const selectedType = document.getElementById("reactionType").value;
-            let resultText = document.getElementById("result");
             
             if (JSON.stringify(coeffs) === JSON.stringify(currentEq.answer) && selectedType === currentEq.type) {
-                resultText.innerText = "Correct!";
-                resultText.className = "result correct";
+                document.getElementById("result").innerText = "Correct!";
                 document.getElementById("explanation").innerText = currentEq.explanation;
                 document.getElementById("explanation").classList.remove("hidden");
                 score++;
                 document.getElementById("score").innerText = score;
             } else {
-                resultText.innerText = "Try Again!";
-                resultText.className = "result incorrect";
+                document.getElementById("result").innerText = "Try Again!";
             }
         }
     </script>
