@@ -65,6 +65,11 @@
     </div>
     
     <script>
+        function startGame() {
+            document.getElementById("main-menu").classList.add("hidden");
+            document.getElementById("game-container").classList.remove("hidden");
+        }
+        
         function checkBalance() {
             const coeffs = [
                 parseInt(document.getElementById("coeff1").value) || 0,
