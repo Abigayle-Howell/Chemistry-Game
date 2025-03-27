@@ -17,11 +17,30 @@
         .score { margin-top: 15px; font-size: 24px; font-weight: bold; }
         .hidden { display: none; }
         .footer { position: absolute; bottom: 10px; left: 10px; font-size: 16px; color: #555; }
+        .correct { color: green; animation: pop 0.3s ease-in-out; }
+        .incorrect { color: red; animation: shake 0.3s ease-in-out; }
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
     </style>
 </head>
 <body>
     <div id="main-menu" class="container">
         <h2>Welcome to Abby's chemistry game :D</h2>
+        <p>How to Play:</p>
+        <p>1. You will be given an unbalanced chemical equation</p>
+        <p>2. Enter the correct coefficients in the boxes to balance it</p>
+        <p>3. Select the correct reaction type from the dropdown</p>
+        <p>4. Click "Check" to see if you're right</p>
+        <p>5. Get points for being smart, lose points if you get stuff wrong</p>
         <button onclick="startGame()">Start Game</button>
     </div>
     
@@ -37,6 +56,7 @@
             <option value="combustion">Combustion</option>
         </select>
         <button onclick="checkBalance()">Check</button>
+        <button onclick="newEquation()">New Equation</button>
         <p class="result" id="result"></p>
         <p class="score">Score: <span id="score">0</span></p>
         <p id="explanation" class="hidden"></p>
@@ -44,16 +64,8 @@
     
     <script>
         const equations = [
-            { reactants: ["H₂", "O₂"], product: "H₂O", answer: [2, 1, 2], type: "synthesis", explanation: "Hydrogen and oxygen react to form water, a crucial reaction in nature." },
-            { reactants: ["C", "O₂"], product: "CO₂", answer: [1, 1, 1], type: "combustion", explanation: "Carbon burns in oxygen to produce carbon dioxide, an essential part of the carbon cycle." },
-            { reactants: ["Na", "Cl₂"], product: "NaCl", answer: [2, 1, 2], type: "synthesis", explanation: "Sodium metal reacts with chlorine gas to form sodium chloride, common table salt." },
-            { reactants: ["CH₄", "O₂"], product: "CO₂", answer: [1, 2, 1, 2], type: "combustion", explanation: "Methane combusts in oxygen, releasing energy and forming carbon dioxide and water." },
-            { reactants: ["N₂", "H₂"], product: "NH₃", answer: [1, 3, 2], type: "synthesis", explanation: "Nitrogen gas reacts with hydrogen to form ammonia, essential for fertilizers." },
-            { reactants: ["CaCO₃"], product: "CaO + CO₂", answer: [1, 1, 1], type: "decomposition", explanation: "Calcium carbonate decomposes into calcium oxide and carbon dioxide." },
-            { reactants: ["Fe", "O₂"], product: "Fe₂O₃", answer: [4, 3, 2], type: "synthesis", explanation: "Iron reacts with oxygen to form rust (iron(III) oxide)." },
-            { reactants: ["HCl", "NaOH"], product: "NaCl + H₂O", answer: [1, 1, 1, 1], type: "double replacement", explanation: "Hydrochloric acid neutralizes sodium hydroxide, forming salt and water." },
-            { reactants: ["H₂SO₄", "NaOH"], product: "Na₂SO₄ + H₂O", answer: [1, 2, 1, 2], type: "double replacement", explanation: "Sulfuric acid reacts with sodium hydroxide to form sodium sulfate and water." },
-            { reactants: ["C₂H₆", "O₂"], product: "CO₂ + H₂O", answer: [2, 7, 4, 6], type: "combustion", explanation: "Ethane burns in oxygen to produce carbon dioxide and water." }
+            { reactants: ["H₂", "O₂"], product: "H₂O", answer: [2, 1, 2], type: "synthesis", explanation: "Water is formed when hydrogen gas reacts with oxygen gas." },
+            { reactants: ["C", "O₂"], product: "CO₂", answer: [1, 1, 1], type: "combustion", explanation: "Carbon reacts with oxygen to form carbon dioxide." }
         ];
         
         let currentEq = {};
@@ -67,12 +79,32 @@
         
         function newEquation() {
             currentEq = equations[Math.floor(Math.random() * equations.length)];
-            document.getElementById("equation").innerHTML = `${currentEq.reactants.join(" + ")} → ${currentEq.product}`;
+            document.getElementById("equation").innerHTML = 
+                `<input type="number" id="coeff1" min="1"> ${currentEq.reactants[0]} + 
+                <input type="number" id="coeff2" min="1"> ${currentEq.reactants[1]} → 
+                <input type="number" id="coeff3" min="1"> ${currentEq.product}`;
+            document.getElementById("result").innerText = "";
+            document.getElementById("explanation").classList.add("hidden");
+            document.getElementById("reactionType").value = "";
         }
         
         function checkBalance() {
-            document.getElementById("explanation").innerText = currentEq.explanation;
-            document.getElementById("explanation").classList.remove("hidden");
+            const coeffs = [
+                parseInt(document.getElementById("coeff1").value) || 0,
+                parseInt(document.getElementById("coeff2").value) || 0,
+                parseInt(document.getElementById("coeff3").value) || 0
+            ];
+            const selectedType = document.getElementById("reactionType").value;
+            
+            if (JSON.stringify(coeffs) === JSON.stringify(currentEq.answer) && selectedType === currentEq.type) {
+                document.getElementById("result").innerText = "Correct!";
+                document.getElementById("explanation").innerText = currentEq.explanation;
+                document.getElementById("explanation").classList.remove("hidden");
+                score++;
+                document.getElementById("score").innerText = score;
+            } else {
+                document.getElementById("result").innerText = "Try Again!";
+            }
         }
     </script>
     <div class="footer">Made by: Abigayle Howell (Abby) for chem honors project :D</div>
