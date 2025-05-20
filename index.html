@@ -1,190 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abby Chemistry Game :D</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/Abigayle-Howell/Chemistry-Game/refs/heads/main/favcon.ico" type="image/x-icon">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #e3f2fd;
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        .container {
-            padding: 20px;
-            background: white;
-            width: 90%;
-            max-width: 600px;
-            border-radius: 10px;
-            box-shadow: 2px 2px 10px gray;
-        }
-        input {
-            width: 60px;
-            text-align: center;
-            font-size: 20px;
-            margin: 5px;
-            -moz-appearance: textfield;
-        }
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        button {
-            margin-top: 15px;
-            padding: 12px 18px;
-            font-size: 18px;
-            background: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-        button:hover {
-            background: #0056b3;
-        }
-        .result {
-            margin-top: 15px;
-            font-weight: bold;
-            font-size: 22px;
-        }
-        .score {
-            margin-top: 15px;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .hidden {
-            display: none;
-        }
-        .footer {
-            font-size: 16px;
-            color: #555;
-            margin-top: 20px;
-        }
-        .correct {
-            color: green;
-            animation: pop 0.3s ease-in-out;
-        }
-        .incorrect {
-            color: red;
-            animation: shake 0.3s ease-in-out;
-        }
-        @keyframes pop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Abby Chemistry Game :D</title>
+  <link rel="icon" href="https://raw.githubusercontent.com/Abigayle-Howell/Chemistry-Game/refs/heads/main/favcon.ico" type="image/x-icon">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #e3f2fd;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .container {
+      padding: 20px;
+      background: white;
+      width: 90%;
+      max-width: 600px;
+      border-radius: 10px;
+      box-shadow: 2px 2px 10px gray;
+      margin-bottom: 20px;
+    }
+    input {
+      width: 60px;
+      text-align: center;
+      font-size: 20px;
+      margin: 5px;
+      -moz-appearance: textfield;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    button {
+      margin-top: 15px;
+      padding: 12px 18px;
+      font-size: 18px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .result {
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 22px;
+    }
+    .score {
+      margin-top: 15px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .hidden {
+      display: none;
+    }
+    .footer {
+      font-size: 16px;
+      color: #555;
+    }
+    .correct {
+      color: green;
+      animation: pop 0.3s ease-in-out;
+    }
+    .incorrect {
+      color: red;
+      animation: shake 0.3s ease-in-out;
+    }
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+    }
+  </style>
 </head>
 <body>
-    <div id="main-menu" class="container">
-        <h2>Welcome to Abby's chemistry game :D</h2>
-        <p>How to Play:</p>
-        <p>1. You will be given an unbalanced chemical equation</p>
-        <p>2. Enter the correct coefficients in the boxes to balance it</p>
-        <p>3. Select the correct reaction type from the dropdown</p>
-        <p>4. Click "Check" to see if you're right</p>
-        <p>5. Get points for being smart, lose points if you get stuff wrong</p>
-        <button onclick="startGame()">Start Game</button>
-    </div>
+  <div id="main-menu" class="container">
+    <h2>Welcome to Abby's Chemistry Game :D</h2>
+    <p>How to Play: (Balancing mode)</p>
+    <p>1. Balance the given chemical equation</p>
+    <p>2. Enter the correct coefficients</p>
+    <p>3. Choose the reaction type</p>
+    <p>4. Hit "Check" to see if you're right</p>
+    <p>How to Play: (Guess product mode)</p>
+    <p>1. Read the reactancts</p>
+    <p>2. Enter the correct product</p>
+    <p>3. Choose the reaction type</p>
+    <p>4. Hit "Check" to see if you're right</p></p>
+    <button onclick="startGame()">Balancing Mode</button>
+    <button onclick="startGuessProductMode()">Guess Product Mode</button>
+  </div>
 
-    <div id="game-container" class="container hidden">
-        <h3>Balance this:</h3>
-        <p id="equation"></p>
-        <select id="reactionType">
-            <option value="">Select Reaction Type</option>
-            <option value="synthesis">Synthesis</option>
-            <option value="decomposition">Decomposition</option>
-            <option value="single replacement">Single Replacement</option>
-            <option value="double replacement">Double Replacement</option>
-            <option value="combustion">Combustion</option>
-        </select>
-        <button onclick="checkBalance()">Check</button>
-        <button onclick="newEquation()">New Equation</button>
-        <p class="result" id="result"></p>
-        <p class="score">Score: <span id="score">0</span></p>
-        <p id="bonusMessage" class="hidden" style="font-size: 18px; color: #28a745; margin-top: 10px;"></p>
-        <p id="explanation" class="hidden"></p>
-    </div>
+  <div id="game-container" class="container hidden">
+    <h3>Balance this:</h3>
+    <p id="equation"></p>
+    <select id="reactionType">
+      <option value="">Select Reaction Type</option>
+      <option value="synthesis">Synthesis</option>
+      <option value="decomposition">Decomposition</option>
+      <option value="single replacement">Single Replacement</option>
+      <option value="double replacement">Double Replacement</option>
+      <option value="combustion">Combustion</option>
+    </select>
+    <button onclick="checkBalance()">Check</button>
+    <button onclick="newEquation()">New Equation</button>
+    <p class="result" id="result"></p>
+    <p class="score">Score: <span id="score">0</span></p>
+    <p id="explanation" class="hidden"></p>
+  </div>
 
-    <script>
-        const equations = [
-            { reactants: ["H₂", "O₂"], product: "H₂O", answer: [2, 1, 2], type: "synthesis", explanation: "Water is formed when hydrogen gas reacts with oxygen gas." },
-            { reactants: ["C", "O₂"], product: "CO₂", answer: [1, 1, 1], type: "combustion", explanation: "Carbon reacts with oxygen to form carbon dioxide." },
-            { reactants: ["Na", "O₂"], product: "Na₂O", answer: [4, 1, 2], type: "synthesis", explanation: "Sodium reacts with oxygen to form sodium oxide." },
-            { reactants: ["N₂", "H₂"], product: "NH₃", answer: [1, 3, 2], type: "synthesis", explanation: "Nitrogen reacts with hydrogen to form ammonia." },
-            { reactants: ["Fe", "O₂"], product: "Fe₂O₃", answer: [4, 3, 2], type: "synthesis", explanation: "Iron reacts with oxygen to form iron(III) oxide." },
-            { reactants: ["Mg", "O₂"], product: "MgO", answer: [2, 1, 2], type: "synthesis", explanation: "Magnesium burns in oxygen to form magnesium oxide." },
-            { reactants: ["S", "O₂"], product: "SO₂", answer: [1, 1, 1], type: "combustion", explanation: "Sulfur combusts in oxygen to form sulfur dioxide." },
-            { reactants: ["Zn", "HCl"], product: "ZnCl₂ + H₂", answer: [1, 2, 1], type: "single replacement", explanation: "Zinc replaces hydrogen in hydrochloric acid to form zinc chloride and hydrogen gas." },
-            { reactants: ["Br₂", "KI"], product: "KBr + I₂", answer: [1, 2, 2], type: "single replacement", explanation: "Bromine replaces iodine in potassium iodide to form potassium bromide and iodine." },
-            { reactants: ["Mg", "H₂SO₄"], product: "MgSO₄ + H₂", answer: [1, 1, 1], type: "single replacement", explanation: "Magnesium replaces hydrogen in sulfuric acid to form magnesium sulfate and hydrogen gas." },
-            { reactants: ["Na", "Cl₂"], product: "NaCl", answer: [2, 1, 2], type: "synthesis", explanation: "Sodium reacts with chlorine gas to form sodium chloride." }
-        ];
+  <div id="guess-container" class="container hidden">
+    <h3>What product forms?</h3>
+    <p id="guess-reactants"></p>
+    <input type="text" id="userProduct" placeholder="Enter product(s)" style="font-size: 14px;">
+    <select id="guessReactionType">
+      <option value="">Select Reaction Type</option>
+      <option value="synthesis">Synthesis</option>
+      <option value="decomposition">Decomposition</option>
+      <option value="single replacement">Single Replacement</option>
+      <option value="double replacement">Double Replacement</option>
+      <option value="combustion">Combustion</option>
+    </select>
+    <button onclick="checkGuessProduct()">Check</button>
+    <button onclick="newGuessProduct()">New Question</button>
+    <p class="result" id="guess-result"></p>
+    <p id="guess-explanation" class="hidden"></p>
+  </div>
 
-        let currentEq = {};
-        let score = 0;
+  <script>
+    const equations = [
+      { reactants: ["H₂", "O₂"], product: "H₂O", answer: [2, 1, 2], type: "synthesis", explanation: "Water is formed when hydrogen gas reacts with oxygen gas." },
+      { reactants: ["C", "O₂"], product: "CO₂", answer: [1, 1, 1], type: "combustion", explanation: "Carbon reacts with oxygen to form carbon dioxide." },
+      { reactants: ["Na", "O₂"], product: "Na₂O", answer: [2, 1, 2], type: "synthesis", explanation: "Sodium reacts with oxygen to form sodium oxide." },
+      { reactants: ["N₂", "H₂"], product: "NH₃", answer: [1, 3, 2], type: "synthesis", explanation: "Nitrogen reacts with hydrogen to form ammonia." },
+      { reactants: ["Fe", "O₂"], product: "Fe₂O₃", answer: [4, 3, 2], type: "synthesis", explanation: "Iron reacts with oxygen to form iron(III) oxide (rust)." },
+      { reactants: ["Mg", "O₂"], product: "MgO", answer: [2, 1, 2], type: "synthesis", explanation: "Magnesium burns in oxygen to form magnesium oxide." },
+      { reactants: ["S", "O₂"], product: "SO₂", answer: [1, 1, 1], type: "combustion", explanation: "Sulfur combusts in oxygen to form sulfur dioxide." },
+      { reactants: ["P₄", "O₂"], product: "P₂O₅", answer: [1, 5, 2], type: "synthesis", explanation: "Tetraphosphorus reacts with oxygen to form diphosphorus pentoxide." },
+      { reactants: ["Al", "O₂"], product: "Al₂O₃", answer: [4, 3, 2], type: "synthesis", explanation: "Aluminum reacts with oxygen to form aluminum oxide." },
+      { reactants: ["Zn", "HCl"], product: "ZnCl₂ + H₂", answer: [1, 2, 1], type: "single replacement", explanation: "Zinc replaces hydrogen in hydrochloric acid to form zinc chloride and hydrogen gas." },
+      { reactants: ["Br₂", "KI"], product: "KBr + I₂", answer: [1, 2, 2], type: "single replacement", explanation: "Bromine replaces iodine in potassium iodide to form potassium bromide and iodine." },
+      { reactants: ["Mg", "H₂SO₄"], product: "MgSO₄ + H₂", answer: [1, 1, 1], type: "single replacement", explanation: "Magnesium replaces hydrogen in sulfuric acid to form magnesium sulfate and hydrogen gas." },
+      { reactants: ["Na", "Cl₂"], product: "NaCl", answer: [2, 1, 2], type: "synthesis", explanation: "Sodium reacts with chlorine gas to form sodium chloride." },
+    ];
 
-        function startGame() {
-            document.getElementById("main-menu").classList.add("hidden");
-            document.getElementById("game-container").classList.remove("hidden");
-            newEquation();
-        }
+    let currentEq = {};
+    let score = 0;
 
-        function newEquation() {
-            currentEq = equations[Math.floor(Math.random() * equations.length)];
-            document.getElementById("equation").innerHTML = 
-                `<input type="number" id="coeff1" min="1"> ${currentEq.reactants[0]} + 
-                <input type="number" id="coeff2" min="1"> ${currentEq.reactants[1]} → 
-                <input type="number" id="coeff3" min="1"> ${currentEq.product}`;
-            document.getElementById("result").innerText = "";
-            document.getElementById("reactionType").value = "";
-            document.getElementById("explanation").classList.add("hidden");
-            document.getElementById("bonusMessage").classList.add("hidden");
-        }
+    function startGame() {
+      document.getElementById("main-menu").classList.add("hidden");
+      document.getElementById("guess-container").classList.add("hidden");
+      document.getElementById("game-container").classList.remove("hidden");
+      newEquation();
+    }
 
-        function checkBalance() {
-            const coeffs = [
-                parseInt(document.getElementById("coeff1").value) || 0,
-                parseInt(document.getElementById("coeff2").value) || 0,
-                parseInt(document.getElementById("coeff3").value) || 0
-            ];
-            const selectedType = document.getElementById("reactionType").value;
+    function newEquation() {
+      currentEq = equations[Math.floor(Math.random() * equations.length)];
+      document.getElementById("equation").innerHTML =
+        `<input type="number" id="coeff1" min="1"> ${currentEq.reactants[0]} + 
+         <input type="number" id="coeff2" min="1"> ${currentEq.reactants[1]} → 
+         <input type="number" id="coeff3" min="1"> ${currentEq.product}`;
+      document.getElementById("result").innerText = "";
+      document.getElementById("reactionType").value = "";
+      document.getElementById("explanation").classList.add("hidden");
+    }
 
-            if (JSON.stringify(coeffs) === JSON.stringify(currentEq.answer) && selectedType === currentEq.type) {
-                document.getElementById("result").innerText = "Correct!";
-                document.getElementById("explanation").innerText = currentEq.explanation;
-                document.getElementById("explanation").classList.remove("hidden");
-                score++;
-                document.getElementById("score").innerText = score;
+    function checkBalance() {
+      const coeffs = [
+        parseInt(document.getElementById("coeff1").value) || 0,
+        parseInt(document.getElementById("coeff2").value) || 0,
+        parseInt(document.getElementById("coeff3").value) || 0
+      ];
+      const selectedType = document.getElementById("reactionType").value;
 
-                if (score > 3) {
-                    const msg = document.getElementById("bonusMessage");
-                    msg.innerText = "Mrs. Chang is the best teacher";
-                    msg.classList.remove("hidden");
-                } else {
-                    document.getElementById("bonusMessage").classList.add("hidden");
-                }
-            } else {
-                document.getElementById("result").innerText = "Try Again!";
-            }
-        }
-    </script>
+      if (JSON.stringify(coeffs) === JSON.stringify(currentEq.answer) && selectedType === currentEq.type) {
+        document.getElementById("result").innerText = "Correct!";
+        document.getElementById("result").className = "result correct";
+        document.getElementById("explanation").innerText = currentEq.explanation;
+        document.getElementById("explanation").classList.remove("hidden");
+        score++;
+        document.getElementById("score").innerText = score;
+      } else {
+        document.getElementById("result").innerText = "Try Again!";
+        document.getElementById("result").className = "result incorrect";
+      }
+    }
 
-    <div class="footer">Made by: Abigayle Howell (Abby) for chem honors project :D</div>
+    function startGuessProductMode() {
+      document.getElementById("main-menu").classList.add("hidden");
+      document.getElementById("game-container").classList.add("hidden");
+      document.getElementById("guess-container").classList.remove("hidden");
+      newGuessProduct();
+    }
+
+    function newGuessProduct() {
+      currentEq = equations[Math.floor(Math.random() * equations.length)];
+      document.getElementById("guess-reactants").innerText = `Reactants: ${currentEq.reactants.join(" + ")}`;
+      document.getElementById("userProduct").value = "";
+      document.getElementById("guess-result").innerText = "";
+      document.getElementById("guessReactionType").value = "";
+      document.getElementById("guess-explanation").classList.add("hidden");
+    }
+
+    function checkGuessProduct() {
+      const userProduct = document.getElementById("userProduct").value.trim().replace(/\s/g, "");
+      const selectedType = document.getElementById("guessReactionType").value;
+      const actualProduct = currentEq.product.replace(/\s/g, "");
+
+      if (userProduct === actualProduct && selectedType === currentEq.type) {
+        document.getElementById("guess-result").innerText = "Correct!";
+        document.getElementById("guess-result").className = "result correct";
+        document.getElementById("guess-explanation").innerText = currentEq.explanation;
+        document.getElementById("guess-explanation").classList.remove("hidden");
+        score++;
+        document.getElementById("score").innerText = score;
+      } else {
+        document.getElementById("guess-result").innerText = "Try again.";
+        document.getElementById("guess-result").className = "result incorrect";
+      }
+    }
+  </script>
+
+  <div class="footer">Made by: Abigayle Howell (Abby) for chem honors project :D</div>
 </body>
 </html>
+
+
+
